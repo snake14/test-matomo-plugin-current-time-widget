@@ -1,0 +1,29 @@
+{
+    "name": "CurrentLocalTimeWidget",
+    "description": "A widget that displays the local time so that it is easily visible in screenshots.",
+    "version": "0.1.0",
+    "theme": false,
+    "require": {
+        "matomo": ">=4.9.0-rc1,<5.0.0-b1"
+    },
+    "authors": [
+        {
+            "name": "JacobR",
+            "email": "",
+            "homepage": ""
+        }
+    ],
+    "support": {
+        "email": "",
+        "issues": "",
+        "forum": "",
+        "irc": "",
+        "wiki": "",
+        "source": "",
+        "docs": "",
+        "rss": ""
+    },
+    "homepage": "",
+    "license": "GPL v3+",
+    "keywords": []
+}

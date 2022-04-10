@@ -1,0 +1,60 @@
+<script>
+	// Get the current browser time zone and the server time zone for comparison.
+	const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	const siteTimeZone = '{{ siteTimeZone }}';
+	const siteDateTimeString = '{{ siteDateTime }}';
+	var siteTime = Date.parse(siteDateTimeString);
+	var difference = siteTime - (new Date()).getTime();
+	var myInterval;
+
+	$(function() { 
+		// I added this check because it looked like the application was executing it more than once and I only want one interval.
+		if(typeof myInterval === 'undefined') {
+			// Refresh the time every minute.
+			myInterval = setInterval(refreshTime, 60000);
+		}
+
+		// Do the initial formatting to display the current time from the beginning.
+		refreshTime();
+	});
+
+	/*
+	 * This function calculates the current time and refreshes the view with the updated time.
+	 */
+	function refreshTime() {
+		// It's ugly, but using Javascript to format the date instead of making an AJAX call to the server performs much better.
+		var currentDateTime = new Date();
+		$('#localTimeSpan').text(formatDateTime(currentDateTime));
+		var isTimeZoneDifferent = localTimeZone !== siteTimeZone;
+		if(isTimeZoneDifferent) {
+			var time = currentDateTime.getTime() + difference;
+			currentDateTime.setTime(time);
+			$('#siteTimeSpan').text(formatDateTime(currentDateTime));
+		}
+		// Only display the server time if it's different than the local time.
+		$('#siteTimeP').toggle(isTimeZoneDifferent);
+		// Hide the label if we're only displaying one time.
+		$('#localTimeLabel').toggle(isTimeZoneDifferent);
+	}
+
+	function formatDateTime(dateTime) {
+		var month = dateTime.getMonth() + 1;
+		month = (month < 10) ? `0${month}` : month;
+		var day = dateTime.getDate();
+		day = (day < 10) ? `0${day}` : day;
+		var hour = dateTime.getHours();
+		hour = (hour < 10) ? `0${hour}` : hour;
+		var minute = dateTime.getMinutes();
+		minute = (minute < 10) ? `0${minute}` : minute;
+		return dateTime.getFullYear() + '/' + month + '/' + day + ' ' + hour + ':' + minute;
+	}
+</script>
+<style>
+	.slight-left-margin {
+		margin-left: 0.5rem;
+	}
+</style>
+<html>
+	<p><span id="localTimeSpan"></span><span id="localTimeLabel" class="slight-left-margin">({{ localLabel }})</span></p>
+	<p id="siteTimeP"><span id="siteTimeSpan"></span><span class="slight-left-margin">({{ siteLabel }})</span></p>
+</html>
